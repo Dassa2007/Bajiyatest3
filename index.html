@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+    <!-- Google Identity Services (GIS) for Login -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
@@ -177,6 +179,104 @@
         body.light-theme #music-toggle:hover {
             background: #DAA520;
             color: #fff;
+        }
+
+        /* Google Login Bar - NEW, integrated without breaking anything */
+        .auth-bar {
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 8px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255,215,0,0.3);
+            transition: all 0.3s;
+        }
+        body.light-theme .auth-bar {
+            background: rgba(255,255,240,0.85);
+            border-color: rgba(218,165,32,0.4);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.5);
+            padding: 6px 18px 6px 12px;
+            border-radius: 50px;
+            transition: 0.2s;
+        }
+        body.light-theme .user-info {
+            background: #f0f0f0;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #FFD700;
+            object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #FFD700;
+        }
+        body.light-theme .user-name {
+            color: #B8860B;
+        }
+        .logout-btn {
+            background: #FFD700;
+            border: none;
+            color: #121212;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .logout-btn:hover {
+            background: #FFA500;
+            transform: scale(1.02);
+        }
+        .google-signin-wrapper {
+            display: flex;
+            justify-content: flex-end;
+        }
+        #g_id_signin {
+            transform: scale(0.95);
+        }
+        .welcome-guest {
+            color: #FFD700;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 15px;
+            border-radius: 40px;
+        }
+        body.light-theme .welcome-guest {
+            background: #eee;
+            color: #B8860B;
+        }
+        @media (max-width: 768px) {
+            .auth-bar {
+                justify-content: center;
+                margin-top: 10px;
+                padding: 10px 15px;
+            }
+            .user-name {
+                font-size: 0.75rem;
+            }
+            .logout-btn {
+                padding: 5px 12px;
+                font-size: 0.7rem;
+            }
         }
 
         /* Right side navigation */
@@ -863,59 +963,70 @@
 
         .ez-section {
             background: #2A2A2A;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            padding: 25px 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
+            gap: 18px;
+            transition: 0.2s;
         }
 
         .ez-number {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 800;
             color: #FFD700;
             letter-spacing: 2px;
             background: #121212;
-            padding: 10px 20px;
-            border-radius: 40px;
-            border: 1px solid #FFD700;
-            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+            padding: 14px 28px;
+            border-radius: 60px;
+            border: 1.5px solid #FFD700;
+            box-shadow: 0 0 18px rgba(255,215,0,0.4);
+            text-align: center;
+            display: inline-block;
+            width: auto;
+            font-family: 'Archivo Black', monospace;
         }
 
         .copy-btn {
             background: #FFD700;
             color: #121212;
             border: none;
-            padding: 10px 30px;
-            border-radius: 40px;
-            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 700;
             font-size: 1.1rem;
             cursor: pointer;
             transition: 0.3s;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .copy-btn i {
-            font-size: 1.2rem;
+            gap: 12px;
+            box-shadow: 0 0 12px rgba(255,215,0,0.5);
+            width: auto;
+            min-width: 160px;
+            justify-content: center;
         }
 
         .copy-btn:hover {
             background: #FFA500;
             transform: scale(1.05);
-            box-shadow: 0 0 15px #FFA500;
+            box-shadow: 0 0 20px #FFA500;
         }
 
         .copy-message {
-            margin-left: 10px;
+            margin: 0;
             color: #FFD700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 12px;
+            border-radius: 30px;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.25s ease;
+            text-align: center;
+            display: inline-block;
         }
 
         .copy-message.show {
@@ -1174,6 +1285,14 @@
             .payment-image img {
                 width: 220px;
             }
+            .ez-number {
+                font-size: 1.3rem;
+                padding: 10px 20px;
+            }
+            .copy-btn {
+                padding: 10px 24px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -1190,6 +1309,21 @@
     </nav>
 
     <main class="content">
+        <!-- GOOGLE LOGIN BAR (non-intrusive) -->
+        <div class="auth-bar" id="googleAuthBar">
+            <div id="loggedOutView" style="display: flex; align-items: center; gap: 15px;">
+                <span class="welcome-guest"><i class="fas fa-user-circle"></i> Sign in for faster orders</span>
+                <div id="g_id_signin" data-type="standard" data-theme="filled_black" data-size="medium"></div>
+            </div>
+            <div id="loggedInView" style="display: none; align-items: center; gap: 15px;">
+                <div class="user-info">
+                    <img id="userAvatar" class="user-avatar" src="" alt="avatar">
+                    <span id="userName" class="user-name"></span>
+                </div>
+                <button id="logoutButton" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
         <!-- Home Page -->
         <div id="home-page" class="page active-page">
             <header class="page-header"><h1 class="store-name">WELCOME TO BAJIYA TOPUP STORE</h1></header>
@@ -1233,11 +1367,9 @@
         <!-- Membership Page -->
         <div id="membership-page" class="page"><header class="page-header"><h1 class="store-name"> Membership</h1></header><section class="products"><h2></h2><div class="membership-grid"><div class="membership-card"><img src="https://files.catbox.moe/7iwt8b.jpg" alt="membership"><h3>Weekly Lite</h3><button class="price-btn">LKR 150</button></div><div class="membership-card"><img src="https://files.catbox.moe/h00ngb.jpg" alt="membership"><h3>Weekly</h3><button class="price-btn">LKR 550</button></div><div class="membership-card"><img src="https://files.catbox.moe/mzp271.jpg" alt="membership"><h3>Weekly Max</h3><button class="price-btn">LKR 700</button></div><div class="membership-card"><img src="https://files.catbox.moe/39jjgw.jpg" alt="membership"><h3>Monthly </h3><button class="price-btn">LKR 2550</button></div><div class="membership-card"><img src="https://files.catbox.moe/9cjxj6.jpg" alt="membership"><h3>Vip Pack</h3><button class="price-btn">LKR 3100</button></div><div class="membership-card"><img src="https://files.catbox.moe/r57f80.jpg" alt="membership"><h3>Vip Special</h3><button class="price-btn">LKR 4750</button></div></div></section></div>
 
-        <!-- ORDER PAGE with Fixed Email Delivery -->
+        <!-- ORDER PAGE with EZ Number & Copy Button -->
         <div id="order-page" class="page"><header class="page-header"><h1 class="store-name"> Order</h1></header><div class="order-container"><h2>Payment Details</h2>
-            <div class="payment-image">
-                <img src="https://files.catbox.moe/93569r.jpg" alt="EZ Payment QR / Instruction" loading="lazy">
-            </div>
+            <div class="payment-image"><img src="https://files.catbox.moe/93569r.jpg" alt="EZ Payment QR / Instruction" loading="lazy"></div>
             <div class="ez-section"><span class="ez-number" id="ezNumber">0760927037</span><button class="copy-btn" onclick="copyEZ()"><i class="fas fa-copy"></i> Copy</button><span id="copyMessage" class="copy-message">Copied!</span></div>
             <form id="orderForm" class="order-form" enctype="multipart/form-data">
                 <div class="form-group"><label for="packageSelect"><i class="fas fa-crown"></i> Select Package</label><select id="packageSelect" name="package" required><option value="" disabled selected> ✦ Choose a package ✦</option><option value="Diamond ×25">💎 Diamond ×25</option><option value="Diamond ×100">💎 Diamond ×100</option><option value="Diamond ×310">💎 Diamond ×310</option><option value="Diamond ×520">💎 Diamond ×520</option><option value="Diamond ×1060">💎 Diamond ×1060</option><option value="Diamond ×2180">💎 Diamond ×2180</option><option value="Diamond ×5600">💎 Diamond ×5600</option><option value="Diamond ×11500">💎 Diamond ×11500</option><option value="weekly lite">✨ weekly lite</option><option value="weekly">✨ weekly</option><option value="monthly">✨ monthly</option><option value="weekly max">✨ weekly max</option><option value="vip pack">👑 vip pack</option><option value="vip special">👑 vip special</option></select></div>
@@ -1256,38 +1388,25 @@
     <div id="processingOverlay" class="processing-overlay"><div class="processing-card"><div id="processingSpinner" class="spinner"></div><div id="processingMessage" class="processing-message">Processing...</div><div id="processingDetail" class="processing-detail">Please wait, we're sending your order to Bajiya Store.</div></div></div>
 
     <script>
-        // --- Music control ---
+        // --- Existing Functionality (Music, Navigation, Slider, Theme, Stats, Order) ---
         const audio = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-toggle');
         let isPlaying = false;
         function toggleMusic() {
-            if (isPlaying) {
-                audio.pause();
-                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-                musicBtn.classList.remove('playing');
-            } else {
-                audio.play().catch(e => console.log('Playback failed:', e));
-                musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                musicBtn.classList.add('playing');
-            }
+            if (isPlaying) { audio.pause(); musicBtn.innerHTML = '<i class="fas fa-music"></i>'; musicBtn.classList.remove('playing'); }
+            else { audio.play().catch(e => console.log('Playback failed:', e)); musicBtn.innerHTML = '<i class="fas fa-pause"></i>'; musicBtn.classList.add('playing'); }
             isPlaying = !isPlaying;
         }
         musicBtn.addEventListener('click', toggleMusic);
-        audio.addEventListener('ended', () => {
-            if (audio.loop) return;
-            isPlaying = false;
-            musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            musicBtn.classList.remove('playing');
-        });
+        audio.addEventListener('ended', () => { if (audio.loop) return; isPlaying = false; musicBtn.innerHTML = '<i class="fas fa-music"></i>'; musicBtn.classList.remove('playing'); });
 
-        // --- Navigation & slider ---
         function showPage(pageId) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(pageId + '-page')?.classList.add('active-page'); document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active')); document.getElementById('nav-' + pageId)?.classList.add('active'); }
+        window.showPage = showPage;
         function copyEZ() { const ez = document.getElementById('ezNumber').innerText; navigator.clipboard.writeText(ez).then(() => { const msg = document.getElementById('copyMessage'); msg.classList.add('show'); setTimeout(() => msg.classList.remove('show'), 2000); }).catch(() => alert('Failed to copy')); }
         const sliderImg = document.getElementById('slider-image');
-        if (sliderImg) { const images = ['https://files.catbox.moe/vp180f.jpg', 'https://files.catbox.moe/78nias.jpg', 'https://files.catbox.moe/sfq5aa.jpg']; let idx = 0; const dots = document.querySelectorAll('.dot'); function showSlide(i) { if (i >= images.length) i = 0; if (i < 0) i = images.length-1; sliderImg.src = images[i]; dots.forEach((d, k) => d.classList.toggle('active', k === i)); idx = i; } window.currentSlide = showSlide; setInterval(() => { showSlide((idx+1)%images.length); }, 6000); showSlide(0); }
+        if (sliderImg) { const images = ['https://files.catbox.moe/vp180f.jpg', 'https://files.catbox.moe/npp51r.jpg', 'https://files.catbox.moe/sfq5aa.jpg']; let idx = 0; const dots = document.querySelectorAll('.dot'); function showSlide(i) { if (i >= images.length) i = 0; if (i < 0) i = images.length-1; sliderImg.src = images[i]; dots.forEach((d, k) => d.classList.toggle('active', k === i)); idx = i; } window.currentSlide = showSlide; setInterval(() => { showSlide((idx+1)%images.length); }, 6000); showSlide(0); }
         const themeToggle = document.getElementById('theme-toggle'), iconBtn = themeToggle.querySelector('i'); if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-theme'); iconBtn.classList.replace('fa-moon', 'fa-sun'); } themeToggle.addEventListener('click', () => { document.body.classList.toggle('light-theme'); const isLight = document.body.classList.contains('light-theme'); iconBtn.classList.replace(isLight ? 'fa-moon' : 'fa-sun', isLight ? 'fa-sun' : 'fa-moon'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); });
         
-        // ========== STATS COUNT-UP ==========
         let statsAnimated = false;
         function animateStats() {
             if (statsAnimated) return;
@@ -1317,13 +1436,10 @@
             }
             requestAnimationFrame(updateCount);
         }
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting && !statsAnimated) { animateStats(); observer.disconnect(); } });
-        }, { threshold: 0.3 });
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && !statsAnimated) { animateStats(); observer.disconnect(); } }); }, { threshold: 0.3 });
         const statsContainerElem = document.getElementById('statsContainer');
         if (statsContainerElem) observer.observe(statsContainerElem);
         
-        // ========== FIXED ORDER FORM - RELIABLE EMAIL TO bajiyatopup@gmail.com ==========
         const orderForm = document.getElementById('orderForm');
         const overlay = document.getElementById('processingOverlay');
         if (orderForm) {
@@ -1338,17 +1454,11 @@
                 if (!uid) return alert('Game ID is required.');
                 if (!receipt) return alert('Please upload a payment receipt.');
                 if (receipt.size > 8 * 1024 * 1024) return alert('Receipt image must be less than 8MB.');
-                
                 const submitBtn = orderForm.querySelector('.submit-btn');
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Sending...';
                 overlay.classList.add('active');
-                document.getElementById('processingSpinner').style.display = 'block';
-                document.getElementById('processingMessage').innerHTML = 'Submitting Order...';
-                document.getElementById('processingDetail').innerHTML = 'Please wait, your order is being securely sent.';
-                
                 const formData = new FormData();
-                // Using FormSubmit with the new email address for reliable delivery
                 formData.append('_subject', `🛒 NEW TOPUP ORDER from Bajiya Store - ${pkg} x${qty}`);
                 formData.append('_captcha', 'false');
                 formData.append('_template', 'table');
@@ -1357,40 +1467,90 @@
                 formData.append('quantity', qty);
                 formData.append('user_id', uid);
                 formData.append('receipt', receipt);
-                formData.append('order_summary', `${pkg} | Quantity: ${qty} | Game ID: ${uid}`);
-                
                 try {
-                    const response = await fetch('https://formsubmit.co/ajax/bajiyatopup@gmail.com', {
-                        method: 'POST',
-                        body: formData
-                    });
+                    const response = await fetch('https://formsubmit.co/ajax/bajiyatopup@gmail.com', { method: 'POST', body: formData });
                     overlay.classList.remove('active');
-                    if (response.ok) {
-                        alert(`✅ Order submitted successfully!\n\nPackage: ${pkg}\nQuantity: ${qty}\nGame ID: ${uid}\n\nOur team will verify your payment and deliver diamonds within minutes. Thank you for choosing Bajiya TopUp!`);
-                        orderForm.reset();
-                        document.getElementById('packageSelect').value = '';
-                        document.getElementById('quantity').value = '1';
-                        document.getElementById('userId').value = '';
-                        document.getElementById('receipt').value = '';
-                    } else {
-                        const errorText = await response.text();
-                        console.error('FormSubmit error:', errorText);
-                        alert('⚠️ Order could not be sent. Please check your internet and try again. If the issue persists, contact us on WhatsApp.');
-                    }
-                } catch (error) {
-                    console.error('Network error:', error);
-                    overlay.classList.remove('active');
-                    alert('❌ Network error. Please check your connection and try again. You can also place order via WhatsApp if issue continues.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '⚡ Topup Confirm ⚡';
-                    document.getElementById('processingSpinner').style.display = 'block';
-                    document.getElementById('processingMessage').innerHTML = 'Processing...';
-                    document.getElementById('processingDetail').innerHTML = 'Please wait, we\'re sending your order to Bajiya Store.';
-                }
+                    if (response.ok) { alert(`✅ Order submitted successfully!\n\nPackage: ${pkg}\nQuantity: ${qty}\nGame ID: ${uid}\n\nOur team will verify your payment and deliver diamonds within minutes. Thank you!`); orderForm.reset(); document.getElementById('packageSelect').value = ''; document.getElementById('quantity').value = '1'; document.getElementById('userId').value = ''; document.getElementById('receipt').value = ''; }
+                    else alert('⚠️ Order could not be sent. Please try again or contact WhatsApp.');
+                } catch (error) { overlay.classList.remove('active'); alert('❌ Network error. Please check your connection.'); }
+                finally { submitBtn.disabled = false; submitBtn.textContent = '⚡ Topup Confirm ⚡'; }
             });
         }
         if (!document.querySelector('.page.active-page')) showPage('home');
+
+        // ------------------- GOOGLE LOGIN INTEGRATION (NO BREAK) -------------------
+        // IMPORTANT: Replace YOUR_GOOGLE_CLIENT_ID with actual client ID from Google Cloud Console.
+        // For this demo, use placeholder — user must replace with own ID for production.
+        const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";  // <-- Replace with your Client ID
+        
+        // Decode JWT token to get user info
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+        
+        function updateUIForLoggedIn(userData) {
+            document.getElementById('loggedOutView').style.display = 'none';
+            document.getElementById('loggedInView').style.display = 'flex';
+            document.getElementById('userName').innerText = userData.name || userData.email;
+            document.getElementById('userAvatar').src = userData.picture || 'https://ui-avatars.com/api/?background=FFD700&color=000&name=' + encodeURIComponent(userData.name || 'User');
+            localStorage.setItem('googleUser', JSON.stringify(userData));
+        }
+        
+        function updateUIForLoggedOut() {
+            document.getElementById('loggedOutView').style.display = 'flex';
+            document.getElementById('loggedInView').style.display = 'none';
+            localStorage.removeItem('googleUser');
+            // re-render google button if needed (but library already handles)
+            if (window.google && google.accounts.id) {
+                google.accounts.id.renderButton(document.getElementById('g_id_signin'), { theme: 'filled_black', size: 'medium', width: 200 });
+            }
+        }
+        
+        function handleCredentialResponse(response) {
+            const userObject = decodeJwtResponse(response.credential);
+            updateUIForLoggedIn({ name: userObject.name, email: userObject.email, picture: userObject.picture });
+        }
+        
+        // Initialize Google Sign-In
+        window.onload = function() {
+            if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com") {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                google.accounts.id.renderButton(document.getElementById('g_id_signin'), { theme: 'filled_black', size: 'medium', width: 200 });
+                google.accounts.id.prompt(); // one-tap optional
+            } else {
+                console.warn("⚠️ Google Login: Please set a valid GOOGLE_CLIENT_ID. Replace placeholder in script.");
+                const signDiv = document.getElementById('g_id_signin');
+                if(signDiv) signDiv.innerHTML = '<span style="color:#FFD700; font-size:12px;">Client ID missing</span>';
+            }
+            // Check existing login state
+            const savedUser = localStorage.getItem('googleUser');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    updateUIForLoggedIn(user);
+                } catch(e) { updateUIForLoggedOut(); }
+            } else {
+                updateUIForLoggedOut();
+            }
+        };
+        
+        // Logout functionality
+        document.getElementById('logoutButton')?.addEventListener('click', function() {
+            if (window.google && google.accounts.id) {
+                google.accounts.id.disableAutoSelect();
+            }
+            updateUIForLoggedOut();
+        });
     </script>
 </body>
 </html>
